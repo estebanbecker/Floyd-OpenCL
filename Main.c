@@ -37,17 +37,44 @@ void libererGraphe(float* matrice) {
 void afficherGraphe(float* matrice, int n) {
     printf("Matrice d'adjacence:\n");
     printf("    ");
-    for (int j = 0; j < n; j++) {
+    for (int j = 0; j < (n > 20 ? 10 : n); j++) {
         printf("%6d ", j);
+    }
+    if (n > 20) {
+        printf(" ... ");
+        for (int j = n - 10; j < n; j++) {
+            printf("%6d ", j);
+        }
     }
     printf("\n");
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < (n > 20 ? 10 : n); i++) {
         printf("%4d ", i);
-        for (int j = 0; j < n; j++) {
+        for (int j = 0; j < (n > 20 ? 10 : n); j++) {
             printf("%6.2f ", matrice[i * n + j]);
         }
+        if (n > 20) {
+            printf(" ... ");
+            for (int j = n - 10; j < n; j++) {
+                printf("%6.2f ", matrice[i * n + j]);
+            }
+        }
         printf("\n");
+    }
+
+    if (n > 20) {
+        printf(" ... \n");
+        for (int i = n - 10; i < n; i++) {
+            printf("%4d ", i);
+            for (int j = 0; j < 10; j++) {
+                printf("%6.2f ", matrice[i * n + j]);
+            }
+            printf(" ... ");
+            for (int j = n - 10; j < n; j++) {
+                printf("%6.2f ", matrice[i * n + j]);
+            }
+            printf("\n");
+        }
     }
 }
 
