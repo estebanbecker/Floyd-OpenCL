@@ -7,3 +7,7 @@ Main.obj
 HelloOpenCL.exe
 code_prof/code_prof.obj
 code_prof/PROF.exe
+*.exe
+*.obj
+*.ilk
+*.pdb
