@@ -271,9 +271,9 @@ int main(int argc, char** argv) {
     printf("Passage des paramètres\n");
     fflush(stdout);
 
-    status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&elements);
-    status |= clSetKernelArg(kernel, 1, sizeof(cl_mem), (void*)&bufferA);
-    status |= clSetKernelArg(kernel, 2, sizeof(cl_mem), (void*)&bufferC);
+    status = clSetKernelArg(kernel, 1, sizeof(int), (void*)&elements);
+    status |= clSetKernelArg(kernel, 2, sizeof(cl_mem), (void*)&bufferA);
+    status |= clSetKernelArg(kernel, 3, sizeof(cl_mem), (void*)&bufferC);
 
     if (status != CL_SUCCESS) {
         printf("Erreur lors du passage des paramètres: %d\n", status);
@@ -293,31 +293,44 @@ int main(int argc, char** argv) {
     // Start timer
     clock_t start = clock();
 
-    status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, NULL, 0, NULL, NULL);
+    for (int k = 0; k < elements; k++) {
+        // Set the current iteration as a kernel argument
+        status = clSetKernelArg(kernel, 0, sizeof(int), (void*)&k);
 
-    if (status != CL_SUCCESS) {
-        printf("Erreur lors de l'exécution du kernel: %d\n", status);
-        return -1;
+        if (status != CL_SUCCESS) {
+            printf("Erreur lors du passage des paramètres: %d\n", status);
+            return -1;
+        }
+
+        // Enqueue the kernel
+        status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, NULL, 0, NULL, NULL);
+
+        if (status != CL_SUCCESS) {
+            printf("Erreur lors de l'exécution du kernel: %d\n", status);
+            return -1;
+        }
+
+        // Wait for the kernel to finish
+        clFinish(cmdQueue);
+
+
     }
-
-    clFinish(cmdQueue);
 
     // Stop timer
     clock_t end = clock();
     double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Temps d'exécution du noyau: %f secondes\n", time_spent);
 
     //-----------------------------------------------------
     // STEP 12: Read the output buffer back to the host
     //-----------------------------------------------------
-    clEnqueueReadBuffer(cmdQueue, bufferC, CL_TRUE, 0, datasize, C, 0, NULL, NULL);
+    clEnqueueReadBuffer(cmdQueue, bufferA, CL_TRUE, 0, datasize, C, 0, NULL, NULL);
 
     printf("Matrice Input:\n");
     afficherGraphe(A, elements);
 
     printf("Matrice Output:\n");
     afficherGraphe(C, elements);
-
-    printf("Temps d'exécution du noyau: %f secondes\n", time_spent);
 
     //-----------------------------------------------------
     // STEP 13: Release OpenCL resources
