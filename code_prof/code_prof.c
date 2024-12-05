@@ -804,3 +804,5 @@ int main(){
     free(devices);
 
     return 0;
+
+}
