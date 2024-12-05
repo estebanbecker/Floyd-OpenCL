@@ -262,11 +262,14 @@ int main() {
                              0,
                              sizeof(cl_int),
                              (void*) &elements);
+
     status  = clSetKernelArg(
                              kernel,
                              1,
                              sizeof(cl_mem),
                              (void*) &bufferA);
+
+
     status = clSetKernelArg(
                              kernel,
                              2,
@@ -277,6 +280,7 @@ int main() {
                              3,
                              sizeof(cl_mem),
                              (void*) &bufferC);
+
 
     //-----------------------------------------------------
     // STEP 10: Configure the work-item structure
@@ -290,6 +294,9 @@ int main() {
 
     size_t MaxGroup;
     clGetDeviceInfo(devices[0],CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &MaxGroup, NULL);
+
+    clGetDeviceInfo(devices[0],CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &MaxGroup, NULL);
+
     printf("CL_DEVICE_MAX_WORK_GROUP_SIZE = %d\n", (int) MaxGroup);
 
     size_t MaxItems[3];
