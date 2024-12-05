@@ -316,11 +316,6 @@ int main(int argc, char** argv) {
 
     }
 
-    // Stop timer
-    clock_t end = clock();
-    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("Temps d'exécution du noyau: %f secondes\n", time_spent);
-
     //-----------------------------------------------------
     // STEP 12: Read the output buffer back to the host
     //-----------------------------------------------------
@@ -331,6 +326,12 @@ int main(int argc, char** argv) {
 
     printf("Matrice Output:\n");
     afficherGraphe(C, elements);
+
+    // Stop timer
+    clock_t end = clock();
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Temps d'exécution du noyau: %f secondes\n", time_spent);
+
 
     //-----------------------------------------------------
     // STEP 13: Release OpenCL resources
