@@ -13,11 +13,20 @@ float* initialiserGraphe(int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (i == j) {
-                matrice[i * n + j] = 0.0f; // L'arc de i à i vaut 0
-            } else if (j == (i + 1) % n) {
-                matrice[i * n + j] = (i == n - 1) ? 5.0f : 2.0f; // Arc de i à i+1 vaut 2, et arc de n-1 à 0 vaut 5
+                // L'arc de i à i vaut 0
+                printf("i=%d j=%d\n", i, j);
+                matrice[i * n + j] = 0.0f; 
+            } else if (j == (i + 1)) {
+                // Arc de i à i+1 vaut 2
+                matrice[i * n + j] = 2.0f; 
+            
+            
+             } else if (i == n-1 && j == 0) {
+                //arc de n-1 à 0 vaut 5
+                matrice[i * n + j] = 5.0f; 
             } else {
-                matrice[i * n + j] = 5.0f * n; // Tous les autres arcs valent 5n
+                // Tous les autres arcs valent 5n
+                matrice[i * n + j] = 5.0f * n; 
             }
         }
     }
@@ -75,7 +84,8 @@ int main() {
     size_t datasize = sizeof(float)*elements*elements;
 
     // Allocate space for input/output data
-    A = initialiserGraphe(datasize);
+    A = initialiserGraphe(elements);
+    afficherGraphe(A, elements);
     C = (float*)malloc(datasize);
     cl_int status;
 
@@ -318,7 +328,6 @@ int main() {
     printf("CL_DEVICE_MAX_WORK_ITEM_SIZES = (%d, %d, %d)\n", (int) MaxItems[0], (int)MaxItems[1], (int)MaxItems[2]);
 
     size_t globalWorkSize[2]={elements, elements};
-    size_t localWorkSize[3]={20,20};
     // There are 'elements' work-items
 
     //-----------------------------------------------------
