@@ -315,7 +315,7 @@ int main(){
 
                                     context,
 
-                                    devices[1],
+                                    devices[0],
 
                                     0,
 
@@ -559,6 +559,7 @@ int main(){
 
                              (void*) &elements);
 
+
     status  = clSetKernelArg(
 
                              kernel,
@@ -569,6 +570,7 @@ int main(){
 
                              (void*) &bufferA);
 
+
     status = clSetKernelArg(
 
                              kernel,
@@ -577,7 +579,9 @@ int main(){
 
                              sizeof(cl_mem),
 
-                             (void*) &bufferB);
+                            (void*) &bufferB);
+
+   
 
     status = clSetKernelArg(
 
@@ -588,6 +592,7 @@ int main(){
                              sizeof(cl_mem),
 
                              (void*) &bufferC);
+
 
     
 
@@ -617,7 +622,7 @@ int main(){
 
     size_t MaxGroup;
 
-    clGetDeviceInfo(devices[1],CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &MaxGroup, NULL);
+    clGetDeviceInfo(devices[0],CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(size_t), &MaxGroup, NULL);
 
     printf("CL_DEVICE_MAX_WORK_GROUP_SIZE = %d\n", (int) MaxGroup);
 
@@ -627,7 +632,7 @@ int main(){
 
     size_t MaxItems[3];
 
-    clGetDeviceInfo(devices[1],CL_DEVICE_MAX_WORK_ITEM_SIZES, 3*sizeof(size_t), MaxItems, NULL);
+    clGetDeviceInfo(devices[0],CL_DEVICE_MAX_WORK_ITEM_SIZES, 3*sizeof(size_t), MaxItems, NULL);
 
     printf("CL_DEVICE_MAX_WORK_ITEM_SIZES = (%d, %d, %d)\n", (int) MaxItems[0], (int)MaxItems[1], (int)MaxItems[2]);
 
@@ -639,7 +644,7 @@ int main(){
 
     size_t globalWorkSize[2]={elements, elements};
 
-    size_t localWorkSize[3]={20,20};
+    size_t localWorkSize[3]={16,16};
 
     // There are 'elements' work-items
 
