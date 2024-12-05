@@ -203,7 +203,7 @@ int main() {
 
     bufferC = clCreateBuffer(
                              context,
-                             CL_MEM_WRITE_ONLY,
+                             CL_MEM_READ_WRITE,
                              datasize,
                              NULL,
                              &status);
