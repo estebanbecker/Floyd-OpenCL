@@ -6,19 +6,24 @@ __kernel void FloydWarshall( int elements, __global float* input, __global float
 
     int i=0;
 
-    output[row*elements+col] = input[row*elements+col];
-
     barrier(CLK_GLOBAL_MEM_FENCE);
 
     for (i=0; i<elements; i++) {
-        float compare = output[row*elements+i] + output[i*elements+col];
+        float compare = input[row*elements+i] + input[i*elements+col];
 
-        if (output[row*elements+col] > compare) {
+        if (input[row*elements+col] > compare) {
             output[row*elements+col] = compare;
+        } else {
+            output[row*elements+col] = input[row*elements+col];
         }
 
         //Sync threads
         barrier(CLK_GLOBAL_MEM_FENCE);
-    }
+
+        input[row*elements+col] = output[row*elements+col];
+
+        //Sync threads
+        barrier(CLK_GLOBAL_MEM_FENCE);
+    };
 
 };
