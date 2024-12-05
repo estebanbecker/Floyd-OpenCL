@@ -234,15 +234,27 @@ int main() {
 
     printf("Compilation\n");
     fflush(stdout);
-    status = clBuildProgram(
-                            program,
-                            numDevices,
-                            devices,
-                            NULL,
-                            NULL,
-                            NULL);
+    // Compilation du programme
+    status = clBuildProgram(program, numDevices, devices, NULL, NULL, NULL);
 
-    if (status) printf("ERREUR A LA COMPILATION: %d\n", status);
+    if (status != CL_SUCCESS) {
+        printf("ERREUR A LA COMPILATION: %d\n", status);
+
+        // Récupérer la taille du journal de compilation
+        size_t log_size;
+        clGetProgramBuildInfo(program, devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
+
+        // Allouer de la mémoire pour le journal de compilation
+        char *log = (char *)malloc(log_size);
+
+        // Récupérer le journal de compilation
+        clGetProgramBuildInfo(program, devices[0], CL_PROGRAM_BUILD_LOG, log_size, log, NULL);
+
+        // Afficher le journal de compilation
+        printf("%s\n", log);
+        free(log);
+        return -1;
+    }
 
     //-----------------------------------------------------
     // STEP 8: Create the kernel
