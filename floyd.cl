@@ -10,7 +10,7 @@ __kernel void FloydWarshall(int k, int elements, __global float* input, __global
         output[row * elements + col] = input[row * elements + col];
     }
 
-    barrier(CLK_GLOBAL_MEM_FENCE);
+    //barrier(CLK_GLOBAL_MEM_FENCE);
 
     input[row * elements + col] = output[row * elements + col];
 

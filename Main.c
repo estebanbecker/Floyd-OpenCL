@@ -96,7 +96,7 @@ char* load_program_source(const char *filename) {
     return source;
 }
 
-// Multiplication matricielle
+
 int main(int argc, char** argv) {
     if (argc != 2) {
         printf("Usage: %s <taille du graphe>\n", argv[0]);
@@ -316,10 +316,14 @@ int main(int argc, char** argv) {
 
     }
 
+    // Stop timer
+    clock_t end = clock();
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+
     //-----------------------------------------------------
     // STEP 12: Read the output buffer back to the host
     //-----------------------------------------------------
-    clEnqueueReadBuffer(cmdQueue, bufferA, CL_TRUE, 0, datasize, C, 0, NULL, NULL);
+    clEnqueueReadBuffer(cmdQueue, bufferC, CL_TRUE, 0, datasize, C, 0, NULL, NULL);
 
     printf("Matrice Input:\n");
     afficherGraphe(A, elements);
@@ -327,9 +331,7 @@ int main(int argc, char** argv) {
     printf("Matrice Output:\n");
     afficherGraphe(C, elements);
 
-    // Stop timer
-    clock_t end = clock();
-    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    
     printf("Temps d'exécution du noyau: %f secondes\n", time_spent);
 
 
